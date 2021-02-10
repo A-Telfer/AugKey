@@ -4,7 +4,7 @@ Unofficial RandAugment\[1\] implementation for image and keypoint augmentation.
 
 ![](docs/assets/original-v-augment.png)
 
-**Support for Consistency Training:** Consistency Training has been used to attain state-of-the-art results on image classification problems [2, 3]. One challenge in adapting the classification technique proposed in \[1\] to handle keypoints is that the augmentations cause the keypoints to be transformed. In order to deal with this, we implement a `RandAugment.apply_inv_keypoints`, which takes keypoint predictions from augmented images and normalizes them so that they can be compared.
+**Support for Consistency Training:** Consistency Training has been used to attain state-of-the-art results on image classification problems [2, 3]. One challenge in adapting the classification technique proposed in \[1\] to handle keypoints is that the augmentations cause the keypoints to become misaligned. In order to deal with this, we implement a `RandAugment.apply_inv_keypoints`, which takes keypoint predictions from augmented images and normalizes them so that they can be compared.
 
 ## Install
 
