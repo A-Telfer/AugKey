@@ -80,8 +80,7 @@ class RandAugment:
       http://arxiv.org/abs/1909.13719.
     """
 
-    def __init__(self, N=2, operations=None,
-                 magnitude_policy=MagnitudePolicy()):
+    def __init__(self, N=2, operations=None, magnitude_policy=None):
         """Create a new RandAugment instance to generate augmentations.
 
         Parameters
@@ -89,7 +88,10 @@ class RandAugment:
         N : int
             How many operations to use in an augmentation.
         operations : list of Operation
+            The operations that can be selected to build an augmentation.
         magnitude_policy : MagnitudePolicy or callable
+            A policy for selecting the next magnitude. By default this will
+            be set to a random policy with a max magnitude of 10. 
         """
         if operations is None:
             # default augmentations from RandAugment [Cubuk et al., 2019]
@@ -112,7 +114,11 @@ class RandAugment:
         else:
             self.operations = operations
 
-        self.magnitude_policy = magnitude_policy
+        if magnitude_policy is None:
+            self.magnitude_policy = MagnitudePolicy()
+        else:
+            self.magnitude_policy = magnitude_policy
+
         self.augmentation_length = N
 
     def plan_augment(self):
