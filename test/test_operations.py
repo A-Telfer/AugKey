@@ -1,8 +1,12 @@
+"""Test rkaug/operations.py"""
+
 import unittest
 import math
 import numpy as np
 
 from rkaug import operations as ops
+
+# pylint: disable=no-self-use
 
 
 class TestKeypointOperations(unittest.TestCase):
@@ -29,8 +33,8 @@ class TestKeypointOperations(unittest.TestCase):
         inputs = np.identity(2)
         outputs = operation.transform_keypoints(
             inputs, magnitude=0, direction=1)
-        v = math.cos(math.pi/4)
-        target = np.array([[v, -v], [v, v]])
+        value = math.cos(math.pi/4)
+        target = np.array([[value, -value], [value, value]])
         assert np.allclose(target, outputs)
 
     def test_shearx_keypoints(self):
