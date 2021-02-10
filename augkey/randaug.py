@@ -206,6 +206,6 @@ class RandAugment:
         return self.apply_keypoints(
             keypoints,
             magnitude,
-            reversed(augment_operations),  # Reverse the order of augmentations
-            directions*-1  # Reverse the direction of augmentations
+            np.flip(augment_operations),  # Reverse the order of augmentations
+            np.flip(directions)*-1  # Reverse the direction of augmentations
         )

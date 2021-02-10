@@ -98,9 +98,10 @@ class TestRandAug(unittest.TestCase):
         augmentation = [
             ops.Rotate([math.pi/4]),
             ops.TranslateY([50]),
+            ops.TranslateX([50]),
             ops.ShearX([0.5])
         ]
-        directions = np.array([-1, 1, -1])
+        directions = np.array([-1, 1, -1, 1])
         augmenter = ra.RandAugment()
         inputs = np.array([[100, 100]])
         output = augmenter.apply_keypoints(
