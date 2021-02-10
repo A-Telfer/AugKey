@@ -24,7 +24,7 @@ MIT License © 2021 Andre Telfer
 import math
 import numpy as np
 
-from rkaug import operations as ops
+from augkey import operations as ops
 
 
 class MagnitudePolicy:

@@ -1,4 +1,4 @@
-"""Test rkaug/randaug.py"""
+"""Test augkey/randaug.py"""
 
 import unittest
 import math
@@ -6,8 +6,8 @@ import numpy as np
 import cv2
 
 from PIL import Image
-from rkaug import randaug as ra
-from rkaug import operations as ops
+from augkey import randaug as ra
+from augkey import operations as ops
 
 # pylint: disable=no-self-use
 
