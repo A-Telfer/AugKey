@@ -2,7 +2,7 @@
 
 Unofficial RandAugment\[1\] implementation for image and keypoint augmentation.
 
-Framework (TensorFlow/PyTorch) independent, implementation is based on numpy and PIL.
+![](docs/assets/original-v-augment.png)
 
 **Support for Consistency Training:** Consistency Training has been used to attain state-of-the-art results on image classification problems [2, 3]. One challenge in adapting the classification technique proposed in \[1\] to handle keypoints is that the augmentations cause the keypoints to be transformed. In order to deal with this, we implement a `RandAugment.apply_keypoints_inv`, which takes keypoint predictions from augmented images and normalizes them so that they can be compared.
 
@@ -26,6 +26,8 @@ randaug = augkey.RandAugment()
 plan = randaug.plan_augment() 
 augmented_image = randaug.apply_image(image, *plan)
 ```
+
+See the [demo notebook](demo.ipynb) for more examples.
 
 ## Adding/Modifying Operations
 
