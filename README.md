@@ -55,7 +55,7 @@ class Crop(ops.Operation):
     def transform_image(self, image, magnitude=0, direction=1):
         value = self.magnitude_range[magnitude]
         width, height = im.size
-        im.crop((value, height - value, width - value, value))
+        image.crop((value, height - value, width - value, value))
 
     # if using keypoints, similarly implement `transform_keypoints`.
 
