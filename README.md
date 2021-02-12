@@ -10,7 +10,7 @@ Unofficial RandAugment\[1\] implementation for image and keypoint augmentation.
 
 **Why this package?** This package makes three contributions:
 
-1. Provides an easily extenable framework in order to explore different magnitudes, policies, and augmentation operations.
+1. Provides an easily extendable framework in order to explore different magnitudes, policies, and augmentation operations.
 2. Abstracts an "Augmentation Plan" that consists of magnitude, operations, and directions which can then be applied to both images and keypoints.
 3. Provides additional support for consistency training by normalizing keypoint estimates produced from augmented images (see below).
 
@@ -55,7 +55,7 @@ class Crop(ops.Operation):
     def transform_image(self, image, magnitude=0, direction=1):
         value = self.magnitude_range[magnitude]
         width, height = im.size
-        im.crop((value, height - value, width - value, value))
+        return image.crop((value, height - value, width - value, value))
 
     # if using keypoints, similarly implement `transform_keypoints`.
 
