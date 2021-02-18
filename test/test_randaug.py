@@ -44,24 +44,25 @@ class TestRandAug(unittest.TestCase):
         # verify magnitude and augmentation length
         assert magnitude == 1
         assert len(augmentation) == 10
-        for direction, operation in zip(directions, augmentation):
+        for direction, operation_index in zip(directions, augmentation):
             # verify direction values and operation type is identity
             assert direction in [-1, 1]
+            operation = augmenter.operations[operation_index]
             assert isinstance(operation, ops.Identity)
 
     def test_apply_image(self):
         """Test applying multiple operations to an image."""
         magnitude = 1
-        augmentation = [
+        operations = [
             ops.TranslateX([0, 100]),
             ops.TranslateY([0, 100])
         ]
         directions = [-1, -1]
-        augmenter = ra.RandAugment()
+        augmenter = ra.RandAugment(operations=operations)
         image = augmenter.apply_image(
             Image.fromarray(self.image.copy()),
             magnitude,
-            augmentation,
+            [0, 1],  # apply translateX then translateY
             directions
         )
 
@@ -75,16 +76,16 @@ class TestRandAug(unittest.TestCase):
         magnitude = 1
 
         # Translate (100, 100)
-        augmentation = [
+        operations = [
             ops.TranslateX([0, 100]),
             ops.TranslateY([0, 100])
         ]
         directions = [-1, -1]
-        augmenter = ra.RandAugment()
+        augmenter = ra.RandAugment(operations=operations)
         output = augmenter.apply_keypoints(
             np.array([[100, 100]]),
             magnitude,
-            augmentation,
+            [0, 1],  # apply translateX then translateY
             directions
         )
         target = np.array([200, 200])
@@ -95,19 +96,19 @@ class TestRandAug(unittest.TestCase):
         apply_keypoints.
         """
         magnitude = 0
-        augmentation = [
+        operations = [
             ops.Rotate([math.pi/4]),
             ops.TranslateY([50]),
             ops.TranslateX([50]),
             ops.ShearX([0.5])
         ]
         directions = np.array([-1, 1, -1, 1])
-        augmenter = ra.RandAugment()
+        augmenter = ra.RandAugment(operations=operations)
         inputs = np.array([[100, 100]])
         output = augmenter.apply_keypoints(
             inputs,
             magnitude,
-            augmentation,
+            [0, 1, 2, 3],  # apply the operations in order
             directions
         )
         # inputs should not be the same as transformed outputs
@@ -116,7 +117,7 @@ class TestRandAug(unittest.TestCase):
         output = augmenter.apply_inv_keypoints(
             output,
             magnitude,
-            augmentation,
+            [0, 1, 2, 3],
             directions
         )
 
@@ -143,20 +144,20 @@ class TestRandAug(unittest.TestCase):
 
         # transform points
         magnitude = 0
-        augmentation = [
+        operations = [
             ops.TranslateY([50]),
             ops.ShearX([0.5]),
             ops.Rotate([math.pi/8]),
         ]
         directions = np.array([-1, 1, 1])
-        augmenter = ra.RandAugment()
+        augmenter = ra.RandAugment(operations=operations)
 
         # transform image
         image = Image.fromarray(self.image)
         image = augmenter.apply_image(
             image,
             magnitude,
-            augmentation,
+            [0, 1, 2, 3],
             directions
         )
         image = np.array(image)
@@ -165,7 +166,7 @@ class TestRandAug(unittest.TestCase):
         keypoints = augmenter.apply_keypoints(
             keypoints,
             magnitude,
-            augmentation,
+            [0, 1, 2, 3],
             directions
         )
 
