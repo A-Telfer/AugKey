@@ -19,6 +19,7 @@ from PIL import Image, ImageOps, ImageEnhance
 # Used as the default fill value when applying transformations to images.
 GREY = (128, 128, 128)
 
+
 def add_temp_ones_column(func):
     """Convenience function that adds a column of ones to the keypoints for
     affine transform.
@@ -71,7 +72,13 @@ class Operation:
         #pylint: disable=unused-argument
         return image
 
-    def transform_keypoints(self, keypoints, magnitude=0, direction=1):
+    def transform_keypoints(
+        self,
+        keypoints,
+        magnitude=0,
+        direction=1,
+        image_shape=None
+    ):
         """Apply the operation to keypoints.
 
         Parameters
@@ -83,7 +90,10 @@ class Operation:
         direction : {-1, 1}
           For operations that can be applied in either direction. Only required
           by some operations.
-
+        image_shape : (width, height)
+          For operations that require the image's dimensions. The shape 
+          should be in PIL's (width, height) order rather than the standard 
+          nd.array (height, width).
         Returns
         -------
         keypoints : np.array
@@ -168,7 +178,13 @@ class Rotate(Operation):
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
     @add_temp_ones_column
-    def transform_keypoints(self, keypoints, magnitude=0, direction=1):
+    def transform_keypoints(
+        self,
+        keypoints,
+        magnitude=0,
+        direction=1,
+        image_shape=None
+    ):
         value = self.magnitude_range[magnitude] * -direction
         value = np.array([
             [math.cos(value), -math.sin(value), 0],
@@ -187,7 +203,13 @@ class ShearX(Operation):
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
     @add_temp_ones_column
-    def transform_keypoints(self, keypoints, magnitude=0, direction=1):
+    def transform_keypoints(
+        self,
+        keypoints,
+        magnitude=0,
+        direction=1,
+        image_shape=None
+    ):
         value = self.magnitude_range[magnitude] * -direction
         value = np.array([
             [1, value, 0],
@@ -206,7 +228,13 @@ class ShearY(Operation):
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
     @add_temp_ones_column
-    def transform_keypoints(self, keypoints, magnitude=0, direction=1):
+    def transform_keypoints(
+        self,
+        keypoints,
+        magnitude=0,
+        direction=1,
+        image_shape=None
+    ):
         value = self.magnitude_range[magnitude] * -direction
         value = np.array([
             [1, 0, 0],
@@ -225,7 +253,13 @@ class TranslateX(Operation):
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
     @add_temp_ones_column
-    def transform_keypoints(self, keypoints, magnitude=0, direction=1):
+    def transform_keypoints(
+        self,
+        keypoints,
+        magnitude=0,
+        direction=1,
+        image_shape=None
+    ):
         value = self.magnitude_range[magnitude] * -direction
         value = np.array([
             [1, 0, value],
@@ -244,7 +278,13 @@ class TranslateY(Operation):
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
     @add_temp_ones_column
-    def transform_keypoints(self, keypoints, magnitude=0, direction=1):
+    def transform_keypoints(
+        self,
+        keypoints,
+        magnitude=0,
+        direction=1,
+        image_shape=None
+    ):
         value = self.magnitude_range[magnitude] * -direction
         value = np.array([
             [1, 0, 0],

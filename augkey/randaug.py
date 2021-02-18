@@ -91,7 +91,7 @@ class RandAugment:
             The operations that can be selected to build an augmentation.
         magnitude_policy : MagnitudePolicy or callable
             A policy for selecting the next magnitude. By default this will
-            be set to a random policy with a max magnitude of 10. 
+            be set to a random policy with a max magnitude of 10.
         """
         if operations is None:
             # default augmentations from RandAugment [Cubuk et al., 2019]
