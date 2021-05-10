@@ -59,22 +59,15 @@ class Crop(ops.Operation):
 
     # if using keypoints, similarly implement `transform_keypoints`.
 
-operations = [
-    Crop(np.arange(30)), # Pass the magnitude_range in as an argument.
-    ops.Rotate(np.linspace(0, math.radians(30), 30)),
-]
+operations = {
+    'crop': Crop(np.arange(30)), # Pass the magnitude_range in as an argument.
+    'rotate': ops.Rotate(np.linspace(0, math.radians(30), 30)),
+}
 
 randaug = ra.RandAug(operations=operations)
 ```
 
-## Contributing
-
-### Linting
-
-Please run pylint with a max-line-length of 80.
-```pip install pylint```
-
-### Running Tests
+## Running Tests
 
 Tests require `opencv-python`, install with `pip install opencv-python`
 
