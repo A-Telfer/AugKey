@@ -6,15 +6,17 @@ Unofficial RandAugment\[1\] implementation for image and keypoint augmentation.
 
 ## Motivation
 
-**Why RandAugment?** RandAugment achieves state-of-the-art performance with a greatly reduced augmentation parameter search space. It's received additional attention due to its use in self-supervised learning models such as Unsupervised Data Augmentation(Xie et al.) and FixMatch(Sohn et al.).
+**Why RandAugment?** RandAugment achieves state-of-the-art performance with a greatly reduced augmentation parameter search space. It's received additional attention due to its use in self-supervised learning models such as Unsupervised Data Augmentation(Xie et al., 2020)\[3\] and FixMatch(Sohn et al., 2020)\[2\].
 
 **Why this package?** This package makes three contributions:
 
 1. Provides an easily extendable framework in order to explore different magnitudes, policies, and augmentation operations.
 2. Abstracts an "Augmentation Plan" that consists of magnitude, operations, and directions which can then be applied to both images and keypoints.
-3. Provides additional support for consistency training by normalizing keypoint estimates produced from augmented images (see below).
+3. Enables inverse augmentations for keypoints, which moves them back to their original position.
 
 **Support for Consistency Training:** Consistency Training has been used to attain state-of-the-art results on image classification problems [2, 3]. One challenge in adapting the classification technique proposed in \[1\] to handle keypoints is that the augmentations cause the keypoints to become misaligned. In order to deal with this, we implement a `RandAugment.apply_keypoints_inv`, which takes keypoint predictions from augmented images and normalizes them so that they can be compared between augmentations.
+
+A 'visibility' column can be added to keypoints (eg. keypoints become [[x, y, visible]]). If an operation causes a keypoint to be moved outside the image then its visibility will be changed to 0.
 
 ## Install
 

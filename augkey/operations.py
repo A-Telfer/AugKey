@@ -13,12 +13,48 @@ MIT License © 2021 Andre Telfer
 
 import math
 import numpy as np
+import inspect
 
 from PIL import Image, ImageOps, ImageEnhance
 
 # Used as the default fill value when applying transformations to images.
 GREY = (128, 128, 128)
 
+def handle_visibilities(func):
+    """Convenience function that removes the visibility column from keypoints
+    and recalalculates it after"""
+
+    def wrapper(*args, **kwargs):
+        # Update the kwargs so that it includes args
+        sig = inspect.signature(Operation.transform_keypoints)
+        kwargs = sig.bind(*args, **kwargs)
+        kwargs.apply_defaults()
+        kwargs = kwargs.arguments
+
+        # Check to see if there is a visibility column
+        if kwargs['keypoints'].shape[1] == 3:
+            # Remove the 'visible' column
+            visible = kwargs['keypoints'][:, 2]
+            kwargs['keypoints'] = kwargs['keypoints'][:, :2]
+
+            # Get the results
+            results = func(**kwargs)
+
+            # Check if the results are still in the image bounds
+            keypoints_x, keypoints_y = results.T
+            height, width, _ = kwargs['image_shape']
+            inbounds = (keypoints_y >= 0) & (keypoints_y < height) \
+                & (keypoints_x >= 0) & (keypoints_x < width)
+
+            # Update visibilities. They should be 0 if off the image, otherwise
+            # match the original visibilties.
+            visible *= inbounds
+            return np.c_[results, visible]
+
+        # If no visible column, do nothing
+        return func(**kwargs)
+
+    return wrapper
 
 def add_temp_ones_column(func):
     """Convenience function that adds a column of ones to the keypoints for
@@ -177,6 +213,7 @@ class Rotate(Operation):
                  math.sin(value), math.cos(value), 0)
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
+    @handle_visibilities
     @add_temp_ones_column
     def transform_keypoints(
         self,
@@ -202,6 +239,7 @@ class ShearX(Operation):
         value = (1, value, 0, 0, 1, 0)
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
+    @handle_visibilities
     @add_temp_ones_column
     def transform_keypoints(
         self,
@@ -227,6 +265,7 @@ class ShearY(Operation):
         value = (1, 0, 0, value, 1, 0)
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
+    @handle_visibilities
     @add_temp_ones_column
     def transform_keypoints(
         self,
@@ -252,6 +291,7 @@ class TranslateX(Operation):
         value = (1, 0, value, 0, 1, 0)
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
+    @handle_visibilities
     @add_temp_ones_column
     def transform_keypoints(
         self,
@@ -277,6 +317,7 @@ class TranslateY(Operation):
         value = (1, 0, 0, 0, 1, value)
         return image.transform(image.size, Image.AFFINE, value, fillcolor=GREY)
 
+    @handle_visibilities
     @add_temp_ones_column
     def transform_keypoints(
         self,

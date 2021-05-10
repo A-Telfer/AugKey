@@ -98,3 +98,22 @@ class TestKeypointOperations(unittest.TestCase):
         target = inputs.copy()
         target[:, 1] += 10
         assert np.allclose(outputs, target)
+
+    def test_translatey_with_visibilities(self):
+        operation = ops.TranslateY([10])
+        inputs = np.array([
+            [0, 0, 2],
+            [10, 10, 1],
+            [5, 5, 1],
+            [0, 5, 2],
+            [20, 20, 2],
+        ])
+
+        image_shape = (20, 20, 3)
+        outputs = operation.transform_keypoints(inputs, 0, -1, image_shape)
+        visibilities = outputs[:, 2]
+        target_visibilities = np.array([2, 0, 1, 2, 0])
+
+        print(visibilities)
+        print(target_visibilities)
+        self.assertTrue(np.allclose(visibilities, target_visibilities))
