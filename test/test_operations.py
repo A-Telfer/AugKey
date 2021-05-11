@@ -109,7 +109,7 @@ class TestKeypointOperations(unittest.TestCase):
             [20, 20, 2],
         ])
 
-        image_shape = (20, 20, 3)
+        image_shape = (20, 10, 3)
         outputs = operation.transform_keypoints(inputs, 0, -1, image_shape)
         visibilities = outputs[:, 2]
         target_visibilities = np.array([2, 0, 1, 2, 0])

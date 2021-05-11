@@ -86,7 +86,8 @@ class TestRandAug(unittest.TestCase):
             np.array([[100, 100]]),
             magnitude,
             [0, 1],  # apply translateX then translateY
-            directions
+            directions,
+            image_shape=(100,100, 3)
         )
         target = np.array([200, 200])
         assert np.array_equiv(output, target)
@@ -109,7 +110,8 @@ class TestRandAug(unittest.TestCase):
             inputs,
             magnitude,
             [0, 1, 2, 3],  # apply the operations in order
-            directions
+            directions,
+            image_shape=(100, 100, 3)
         )
         # inputs should not be the same as transformed outputs
         assert not np.allclose(inputs, output)
@@ -118,7 +120,8 @@ class TestRandAug(unittest.TestCase):
             output,
             magnitude,
             [0, 1, 2, 3],
-            directions
+            directions,
+            image_shape=(100, 100, 3)
         )
 
         # inputs should now be the same as output
@@ -158,7 +161,7 @@ class TestRandAug(unittest.TestCase):
             image,
             magnitude,
             [0, 1, 2, 3],
-            directions
+            directions,
         )
         image = np.array(image)
 
@@ -167,7 +170,8 @@ class TestRandAug(unittest.TestCase):
             keypoints,
             magnitude,
             [0, 1, 2, 3],
-            directions
+            directions,
+            self.image.shape
         )
 
         # round keypoints to nearest int
